@@ -30,6 +30,13 @@
                 <p class="text-sm text-base-content/60">Enter your credentials to access your account</p>
             </div>
             
+            <?php if (session()->getFlashdata('message')): ?>
+                <div role="alert" class="alert alert-success text-sm py-2 px-3 mb-2 rounded-lg text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-4 w-4" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span><?= session()->getFlashdata('message') ?></span>
+                </div>
+            <?php endif; ?>
+            
             <?php if (session()->getFlashdata('error')): ?>
                 <div role="alert" class="alert alert-error text-sm py-2 px-3 mb-2 rounded-lg text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-4 w-4" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -68,7 +75,7 @@
                         </span>
                     </div>
                     <label class="label">
-                         <a href="#" class="label-text-alt link link-primary hover:no-underline">Forgot password?</a>
+                         <a href="/forgot-password" class="label-text-alt link link-primary hover:no-underline">Forgot password?</a>
                     </label>
                 </div>
 

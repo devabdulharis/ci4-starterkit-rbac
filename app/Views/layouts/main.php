@@ -52,7 +52,7 @@
 
     <div class="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
-        <div class="drawer-content flex flex-col">
+        <div class="drawer-content flex flex-col min-h-screen">
             <!-- Navbar -->
             <div class="navbar bg-base-100/50 backdrop-blur-lg sticky top-0 z-30 border-b border-base-200">
                 <div class="flex-none lg:hidden">
@@ -82,9 +82,13 @@
                     </label>
 
                     <div class="dropdown dropdown-end">
-                        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar placeholder">
-                            <div class="bg-neutral text-neutral-content rounded-full w-10">
-                                <span><?= strtoupper(substr(session()->get('name') ?? 'U', 0, 2)) ?></span>
+                        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar <?php echo session()->get('avatar') ? '' : 'placeholder' ?>">
+                            <div class="<?php echo session()->get('avatar') ? 'w-10 rounded-full' : 'bg-neutral text-neutral-content rounded-full w-10' ?>">
+                                <?php if (session()->get('avatar')): ?>
+                                    <img src="<?= base_url('uploads/avatars/' . session()->get('avatar')) ?>" alt="Avatar" />
+                                <?php else: ?>
+                                    <span><?= strtoupper(substr(session()->get('name') ?? 'U', 0, 2)) ?></span>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
@@ -126,7 +130,7 @@
             
             <footer class="footer footer-center p-4 bg-base-300 text-base-content mt-auto">
                 <aside>
-                    <p>Copyright © <?= date('Y') ?> - All rights reserved by Starter Project</p>
+                    <p>Copyright © <?= date('Y') ?> - All rights reserved | <span class="badge badge-outline badge-sm">Rendered in {elapsed_time}</span></p>
                 </aside>
             </footer>
         </div> 
@@ -186,6 +190,15 @@
                         <a href="/permissions" class="<?= url_is('permissions*') ? 'active !bg-primary !text-primary-content' : '' ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" /></svg>
                             Permissions
+                        </a>
+                    </li>
+                    <?php endif; ?>
+                    
+                    <?php if (service('rbac')->hasRole('Super Admin') || service('rbac')->hasPermission('logs.view')): ?>
+                    <li>
+                        <a href="/logs" class="<?= url_is('logs*') ? 'active !bg-primary !text-primary-content' : '' ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                            Activity Logs
                         </a>
                     </li>
                     <?php endif; ?>

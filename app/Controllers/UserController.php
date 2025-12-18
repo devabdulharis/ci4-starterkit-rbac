@@ -65,6 +65,7 @@ class UserController extends BaseController
         ];
 
         $this->userModel->insert($data);
+        log_activity('create_user', 'Created user: ' . $data['email']);
         return redirect()->to('/users')->with('message', 'User created successfully');
     }
 
@@ -103,12 +104,14 @@ class UserController extends BaseController
         }
 
         $this->userModel->update($id, $data);
+        log_activity('update_user', 'Updated user ID: ' . $id);
         return redirect()->to('/users')->with('message', 'User updated successfully');
     }
 
     public function delete($id)
     {
         $this->userModel->delete($id);
+        log_activity('delete_user', 'Deleted user ID: ' . $id);
         return redirect()->to('/users')->with('message', 'User deleted successfully');
     }
 
@@ -138,6 +141,8 @@ class UserController extends BaseController
             $this->userRoleModel->insertBatch($data);
         }
         
+        
+        log_activity('update_user_roles', 'Updated roles for user ID: ' . $userId);
         return redirect()->to('/users')->with('message', 'User roles updated');
     }
 }

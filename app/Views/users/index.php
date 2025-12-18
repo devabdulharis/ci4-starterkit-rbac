@@ -54,9 +54,13 @@
                     </th>
                     <td>
                         <div class="flex items-center gap-3">
-                            <div class="avatar placeholder">
-                                <div class="bg-neutral text-neutral-content rounded-full w-10">
-                                    <span class="text-xs"><?= strtoupper(substr($user['name'], 0, 2)) ?></span>
+                            <div class="avatar <?php echo $user['avatar'] ? '' : 'placeholder' ?>">
+                                <div class="<?php echo $user['avatar'] ? 'w-10 rounded-full' : 'bg-neutral text-neutral-content rounded-full w-10' ?>">
+                                    <?php if ($user['avatar']): ?>
+                                        <img src="<?= base_url('uploads/avatars/' . $user['avatar']) ?>" alt="Avatar" />
+                                    <?php else: ?>
+                                        <span class="text-xs"><?= strtoupper(substr($user['name'], 0, 2)) ?></span>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                             <div>

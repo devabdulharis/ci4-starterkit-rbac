@@ -58,6 +58,7 @@ class RoleController extends BaseController
             'description' => $this->request->getPost('description'),
         ]);
 
+        log_activity('create_role', 'Created role: ' . $this->request->getPost('name'));
         return redirect()->to('/roles')->with('message', 'Role created successfully');
     }
 
@@ -85,12 +86,14 @@ class RoleController extends BaseController
             'description' => $this->request->getPost('description'),
         ]);
 
+        log_activity('update_role', 'Updated role ID: ' . $id);
         return redirect()->to('/roles')->with('message', 'Role updated successfully');
     }
 
     public function delete($id)
     {
         $this->roleModel->delete($id);
+        log_activity('delete_role', 'Deleted role ID: ' . $id);
         return redirect()->to('/roles')->with('message', 'Role deleted successfully');
     }
 
@@ -120,6 +123,7 @@ class RoleController extends BaseController
             $this->rolePermissionModel->insertBatch($data);
         }
 
+        log_activity('update_role_permissions', 'Updated permissions for role ID: ' . $roleId);
         return redirect()->to('/roles')->with('message', 'Role permissions updated');
     }
 }

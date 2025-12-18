@@ -52,6 +52,7 @@ class PermissionController extends BaseController
             'description' => $this->request->getPost('description'),
         ]);
 
+        log_activity('create_permission', 'Created permission: ' . $this->request->getPost('name'));
         return redirect()->to('/permissions')->with('message', 'Permission created successfully');
     }
 
@@ -79,12 +80,14 @@ class PermissionController extends BaseController
             'description' => $this->request->getPost('description'),
         ]);
 
+        log_activity('update_permission', 'Updated permission ID: ' . $id);
         return redirect()->to('/permissions')->with('message', 'Permission updated successfully');
     }
 
     public function delete($id)
     {
         $this->permissionModel->delete($id);
+        log_activity('delete_permission', 'Deleted permission ID: ' . $id);
         return redirect()->to('/permissions')->with('message', 'Permission deleted successfully');
     }
 }

@@ -34,6 +34,12 @@ class ProfileController extends BaseController
             $rules['password'] = 'min_length[6]';
         }
 
+        // Avatar validation
+        $rules['avatar'] = [
+            'label' => 'Avatar',
+            'rules' => 'permit_empty|is_image[avatar]|mime_in[avatar,image/jpg,image/jpeg,image/png]|max_size[avatar,2048]',
+        ];
+
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
@@ -47,10 +53,27 @@ class ProfileController extends BaseController
             $data['password_hash'] = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
         }
 
-        $this->userModel->update($userId, $data);
+        // Handle Avatar Upload
+        $file = $this->request->getFile('avatar');
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            $newName = $file->getRandomName();
+            $file->move(FCPATH . 'uploads/avatars', $newName);
+            $data['avatar'] = $newName;
+        }
+
+        // Skip model validation since we handled it in controller (to avoid unique email collision with self)
+        if (!$this->userModel->skipValidation(true)->update($userId, $data)) {
+            log_message('error', 'Profile Update Failed: ' . json_encode($this->userModel->errors()));
+            return redirect()->back()->withInput()->with('errors', $this->userModel->errors());
+        }
         
-        // Update session name if changed
+        // Update session name/avatar if changed
         session()->set('name', $data['name']);
+        if (isset($data['avatar'])) {
+            session()->set('avatar', $data['avatar']);
+        }
+
+        log_activity('update_profile', 'User updated profile.');
 
         return redirect()->to('/profile')->with('message', 'Profile updated successfully');
     }

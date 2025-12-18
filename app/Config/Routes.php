@@ -11,14 +11,20 @@ $routes->get('/', 'AuthController::login');
 $routes->get('login', 'AuthController::login');
 $routes->post('login', 'AuthController::attemptLogin');
 $routes->get('logout', 'AuthController::logout');
+$routes->match(['get', 'post'], 'forgot-password', 'AuthController::forgotPassword');
+$routes->get('reset-password/(:any)', 'AuthController::resetPassword/$1');
+$routes->post('reset-password/update', 'AuthController::attemptReset');
 
-// Dashboard & Protected Routes
+// RBAC Protected Routes
 $routes->group('', ['filter' => 'auth'], function($routes) {
     $routes->get('dashboard', 'DashboardController::index');
     
-    // Profile Route
+    // Profile
     $routes->get('profile', 'ProfileController::index');
-    $routes->post('profile/update', 'ProfileController::update');
+    $routes->post('profile', 'ProfileController::update');
+
+    // Activity Logs
+    $routes->get('logs', 'LogsController::index', ['filter' => 'rbac:logs.view']); // Assuming permission name 'logs.view' or general access
 
     // User Routes
     $routes->group('users', function($routes) {

@@ -11,9 +11,13 @@
     <div class="lg:col-span-1">
         <div class="card bg-base-100 shadow-xl border border-base-200">
             <div class="card-body items-center text-center">
-                <div class="avatar placeholder mb-4">
-                    <div class="bg-primary text-primary-content rounded-full w-24 text-3xl">
-                        <span><?= strtoupper(substr($user['name'], 0, 2)) ?></span>
+                <div class="avatar <?php echo $user['avatar'] ? '' : 'placeholder' ?> mb-4">
+                    <div class="<?php echo $user['avatar'] ? 'w-24 rounded-full' : 'bg-primary text-primary-content rounded-full w-24 text-3xl' ?>">
+                        <?php if ($user['avatar']): ?>
+                            <img src="<?= base_url('uploads/avatars/' . $user['avatar']) ?>" alt="Avatar" />
+                        <?php else: ?>
+                            <span><?= strtoupper(substr($user['name'], 0, 2)) ?></span>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <h2 class="card-title"><?= esc($user['name']) ?></h2>
@@ -32,12 +36,23 @@
 
     <!-- Edit Form -->
     <div class="lg:col-span-2">
-        <form action="/profile/update" method="post" class="card bg-base-100 shadow-xl border border-base-200">
+        <form action="/profile" method="post" enctype="multipart/form-data" class="card bg-base-100 shadow-xl border border-base-200">
             <div class="card-body">
                 <h3 class="card-title mb-4">Edit Profile Info</h3>
                 <?= csrf_field() ?>
                 
                 <div class="grid grid-cols-1 gap-6">
+                    <!-- Avatar Upload -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-medium">Profile Picture</span>
+                        </label>
+                        <input type="file" name="avatar" class="file-input file-input-bordered w-full" accept="image/png, image/jpeg, image/jpg" />
+                        <label class="label">
+                            <span class="label-text-alt text-base-content/60">Max 2MB. JPG, PNG.</span>
+                        </label>
+                    </div>
+
                     <!-- Name -->
                     <div class="form-control">
                         <label class="label">
