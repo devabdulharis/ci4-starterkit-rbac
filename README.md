@@ -25,7 +25,7 @@ Cocok untuk memulai project baru yang membutuhkan manajemen user, role, dan perm
 
 ## 🛠️ Instalasi
 
-1.  **Clone Repository **
+1.  **Clone Repository & Install Dependencies**
     ```bash
     git clone https://github.com/devabdulharis/ci4-starterkit-rbac.git
     cd ci4-starterkit-rbac
